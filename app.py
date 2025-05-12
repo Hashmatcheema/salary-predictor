@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import joblib
-import numpy as np
+import pandas as pd  # Add this import
 
 app = Flask(__name__)
 
@@ -18,8 +18,11 @@ def predict():
         data = request.get_json()
         experience = float(data["YearsExperience"])  # Convert to float
 
-        # Reshape for prediction
-        prediction = model.predict([[experience]])[0]
+        # Create a DataFrame with the correct feature name
+        input_data = pd.DataFrame([[experience]], columns=['YearsExperience'])
+
+        # Make a prediction
+        prediction = model.predict(input_data)[0]
 
         return jsonify({"predicted_salary": prediction})
 
